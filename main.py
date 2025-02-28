@@ -6,7 +6,8 @@ def main():
     point2 = Point(300, 400)
     line = Line(point1, point2)
     cell = Cell(50, 150, 300, 450, win)
-    win.draw_line(line=line, fill_color="black")
+    cell.draw()
+    #win.draw_line(line=line, fill_color="black")
     win.wait_for_close()
 
 main()
