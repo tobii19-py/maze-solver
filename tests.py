@@ -15,5 +15,18 @@ class Tests(unittest.TestCase):
             num_rows,
         )
 
+    def test_maze_create_small_cells(self):
+        num_cols = 3
+        num_rows = 3
+        m2 = Maze(2, 1, num_rows, num_cols, 8, 8)
+        self.assertEqual(
+            len(m2._cells[1]),
+            num_cols,
+        )
+        self.assertEqual(
+            len(m2._cells),
+            num_rows,
+        )
+
 if __name__ == "__main__":
     unittest.main()
