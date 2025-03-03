@@ -23,8 +23,8 @@ class Maze:
         self._win = win
         self._cells = []
 
-        if seed is not None:
-            self._seed = random.seed(seed)
+        if seed:
+            random.seed(seed)
 
         self._create_cells()
         self._break_entrance_and_exit()
@@ -68,19 +68,21 @@ class Maze:
 
     def _break_walls_r(self, i, j):
         self._cells[i][j]._visited = True
+
         while True:
             to_visit = []
+
             if self._cells[i][j].has_left_wall == True:
-                if i > 0:
+                if i > 0 and not self._cells[i-1][j]._visited:
                     to_visit.append(self._cells[i-1][j])
             if self._cells[i][j].has_right_wall == True:
-                if i < self._num_cols-1:
+                if i < self._num_cols-1 and not self._cells[i+1][j]._visited:
                     to_visit.append(self._cells[i+1][j])
             if self._cells[i][j].has_top_wall == True:
-                if j > 0:
+                if j > 0 and not self._cells[i][j-1]._visited:
                     to_visit.append(self._cells[i][j-1])
             if self._cells[i][j].has_bottom_wall == True:
-                if j < self._num_rows-1:
+                if j < self._num_rows-1 and not self._cells[i][j+1]._visited:
                     to_visit.append(self._cells[i][j+1])
             if len(to_visit) == 0:
                 self._draw_cell(i, j)
