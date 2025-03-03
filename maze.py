@@ -1,4 +1,3 @@
-from graphics import Line, Point
 from cell import Cell
 import time, random
 
@@ -67,36 +66,40 @@ class Maze:
         self._draw_cell(self._num_cols-1, self._num_rows-1)
 
     def _break_walls_r(self, i, j):
-        self._cells[i][j]._visited = True
+        self._cells[i][j].visited = True
 
         while True:
-            to_visit = []
+            to_visit_list = []
 
-            if self._cells[i][j].has_left_wall == True:
-                if i > 0 and not self._cells[i-1][j]._visited:
-                    to_visit.append(self._cells[i-1][j])
-            if self._cells[i][j].has_right_wall == True:
-                if i < self._num_cols-1 and not self._cells[i+1][j]._visited:
-                    to_visit.append(self._cells[i+1][j])
-            if self._cells[i][j].has_top_wall == True:
-                if j > 0 and not self._cells[i][j-1]._visited:
-                    to_visit.append(self._cells[i][j-1])
-            if self._cells[i][j].has_bottom_wall == True:
-                if j < self._num_rows-1 and not self._cells[i][j+1]._visited:
-                    to_visit.append(self._cells[i][j+1])
-            if len(to_visit) == 0:
+            if i > 0 and not self._cells[i-1][j].visited:
+                to_visit_list.append((i-1, j))
+            if i < self._num_cols-1 and not self._cells[i+1][j].visited:
+                to_visit_list.append((i+1, j))
+            if j > 0 and not self._cells[i][j-1].visited:
+                to_visit_list.append((i, j-1))
+            if j < self._num_rows-1 and not self._cells[i][j+1].visited:
+                to_visit_list.append((i, j+1))
+            if len(to_visit_list) == 0:
                 self._draw_cell(i, j)
                 return
-            directions = {
-                "right": (1, 0, "right", "left"),
-                "left": (-1, 0, "left", "right"),
-                "down": (0, 1, "bottom", "top"),
-                "up": (0, -1, "top", "bottom"),
-            }
-            direction = random.choice(list(directions.keys()))
-            di, dj, current_wall, neighbor_wall = directions[direction]
-            neighbor_i, neighbor_j = i + di, j + dj
-            if 0 <= neighbor_i < self._num_cols and 0 <= neighbor_j < self._num_rows:
-                self._cells[i][j].break_walls(current_wall)
-                self._cells[neighbor_i][neighbor_j].break_walls(neighbor_wall)
-                self._break_walls_r(neighbor_i, neighbor_j)
+            
+            direction_index = random.randrange(len(to_visit_list))
+            next_index = to_visit_list[direction_index]
+            
+            if next_index[0] == i + 1:
+                self._cells[i][j].has_right_wall = False
+                self._cells[i+1][j].has_left_wall = False
+
+            if next_index[0] == i - 1:
+                self._cells[i][j].has_left_wall = False
+                self._cells[i-1][j].has_right_wall = False
+
+            if next_index[1] == j + 1:
+                self._cells[i][j].has_bottom_wall = False
+                self._cells[i][j+1].has_top_wall = False
+
+            if next_index[1] == j - 1:
+                self._cells[i][j].has_top_wall = False
+                self._cells[i][j-1].has_bottom_wall = False
+
+            self._break_walls_r(next_index[0], next_index[1])

@@ -11,7 +11,7 @@ class Cell:
         self._y1 = None
         self._y2 = None
         self._win = win
-        self._visited = False
+        self.visited = False
 
     def draw(self, x1, y1, x2, y2):
         if self._win is None:
@@ -56,13 +56,3 @@ class Cell:
         
         line = Line(Point(x_center, y_center), Point(x_center2, y_center2))
         self._win.draw_line(line, fill_color)
-
-    def break_walls(self, wall):
-        if wall == "left":
-            self.has_left_wall = False
-        elif wall == "right":
-            self.has_right_wall = False
-        elif wall == "top":
-            self.has_top_wall = False
-        elif wall == "bottom":
-            self.has_bottom_wall = False
