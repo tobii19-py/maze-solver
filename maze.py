@@ -29,6 +29,7 @@ class Maze:
         self._break_entrance_and_exit()
         self._break_walls_r(0, 0)
         self._reset_cells_visited()
+        self.solve()
 
     def _create_cells(self):
         for i in range(self._num_cols):
@@ -109,3 +110,47 @@ class Maze:
         for col in self._cells:
             for cell in col:
                 cell.visited = False
+
+    def solve(self):
+        return self._solve_r(0, 0)
+    
+    def _solve_r(self, i, j):
+        self._animate()
+        time.sleep(0.1)
+        self._cells[i][j].visited = True
+        if self._cells[i][j] == self._cells[self._num_cols-1][self._num_rows-1]:
+            return True
+        directions = []
+        if i > 0:
+            directions.append((i-1, j))
+        if i < self._num_cols - 1:
+            directions.append((i+1, j))
+        if j > 0:
+            directions.append((i, j-1))
+        if j < self._num_rows:
+            directions.append((i, j+1))
+        
+        for d0, d1 in directions:
+            print(f"{d0}, {d1}")
+            can_move = False
+
+            if d0 == i - 1 and d1 == j and not self._cells[i][j].has_left_wall and not self._cells[d0][d1].visited:
+                can_move = True
+            elif d0 == i + 1 and d1 == j and not self._cells[i][j].has_right_wall and not self._cells[d0][d1].visited:
+                can_move = True
+            elif d0 == i and d1 == j - 1 and not self._cells[i][j].has_top_wall and not self._cells[d0][d1].visited:
+                can_move = True
+            elif d0 == i and d1 == j + 1 and not self._cells[i][j].has_bottom_wall and not self._cells[d0][d1].visited:
+                can_move = True
+
+            print(can_move)
+            if can_move:
+                print("moving")
+                self._cells[i][j].draw_move(self._cells[d0][d1])
+                if self._solve_r(d0, d1):
+                    print("found")
+                    return True
+                print("no move")
+                self._cells[i][j].draw_move(self._cells[d0][d1], True)
+        return False
+

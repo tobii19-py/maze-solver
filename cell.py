@@ -46,9 +46,9 @@ class Cell:
         x_center = half_length + self._x1
         y_center = half_length + self._y1
 
-        half_length2 = abs(self._x2 - self._x1) // 2
-        x_center2 = half_length2 + self._x1
-        y_center2 = half_length2 + self._y1
+        half_length2 = abs(to_cell._x2 - to_cell._x1) // 2
+        x_center2 = half_length2 + to_cell._x1
+        y_center2 = half_length2 + to_cell._y1
 
         fill_color = "red"
         if undo:
